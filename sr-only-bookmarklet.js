@@ -146,7 +146,6 @@ function listThingsWithTitles(){
     row+='>';
     row+='<td>' + tc + '</td>';
     row+='<td>' + ariaLabelTextValue + '</td>';
-    row+='<td>' + isInteractive + '</td>';
     row+='<td>';
     if (err) {
       row+='<div class="issues">⚠️ Warning:</div>';
@@ -165,7 +164,7 @@ function listThingsWithTitles(){
     }
   });
   s='<style>[aria-pressed=true]{color:white;background:rebeccapurple;}div.issues{font-weight:bold;};textarea {margin:5px 0;}.snippet label {font-weight:bold;font-size:0.8em;color:black;}.snippet{background:#efefef;outline:1px solid #666;padding:5px;margin-top:5px;}.checkDiffs{background:PapayaWhip;}.checkDiffs:after{content:"Accessible name differs";color:#a50202;font-weight:bold;font-size:10px;display:block}.warn {background:lightyellow;}.err {background:PapayaWhip;color:#a50202;}.visually-hidden,.a11y,.visuallyhidden,.sr-text,.sr-only {clip-path: inset(100%);clip: rect(1px, 1px, 1px, 1px);height: 1px;overflow: hidden;position: absolute;white-space: nowrap;width: 1px;}* {-webkit-box-sizing: border-box;box-sizing: border-box;}html {/*border: .75em solid #fff;*/min-height: 100vh;}body {background: #f7f7f5;color: #333;font: 400 105%/1.4 "Work Sans", sans-serif;margin: 1.5em auto;max-width: 54em;width: 90%;}a:elWithAriaLabel,a:visited {border-bottom: 1px solid rgba(42, 122, 130, .5);color: #2b7a82;text-decoration: none;}a:hover {border-bottom: 2px solid;color: #1e565c;}button:focus,a:focus {box-shadow: none;outline-offset: 2px;outline: 3px solid rgba(42, 122, 130, .75);}a:focus {border-bottom: none;}a:active {background: #333;color: #fff;}code {font-family: Consolas, monaco, monospace;-moz-tab-size: 4;tab-size: 4;text-transform: none;white-space: pre-wrap;color:brown;}textarea {width: 100%}legend h2, legend h3 {margin: 0;}table {border-collapse: collapse;}th,td {padding: 10px;border:2px solid #2b7a82;}table caption {font-weight: bold;text-align: left;margin:1em 0;}</style><h1>List of elements with visually hidden text on the page</h1>';
-  s+='<table border="1" cellpadding="5"><caption>Visually hidden text affects accessibility and must be translated. It is invisible text just for screen readers, hence why it is hidden. Remember to let the entire page load before running this tool. Refer to the LD-Visually-Hidden Utility</caption><thead><tr valign=top><th scope="col">On-screen text</th><th>CSS Class</th><th>Interactive?</th><th scope="col">Notes</th><th>Code Markup</th></tr></thead><tbody>' + row + '</tbody></table>';
+  s+='<table border="1" cellpadding="5"><caption>Visually hidden text affects accessibility and must be translated. It is invisible text just for screen readers, hence why it is hidden. Remember to let the entire page load before running this tool. Refer to the LD-Visually-Hidden Utility</caption><thead><tr valign=top><th scope="col">Visually Hidden text</th><th>CSS Class</th><th scope="col">Notes</th><th>Code Markup</th></tr></thead><tbody>' + row + '</tbody></table>';
   s+='<script>function showElsWithSkipLinkClasses(){';
   s+='var refWindow=window.opener;';
   s+='}window.addEventListener("load", (event) => {showElsWithSkipLinkClasses();});</script>';
