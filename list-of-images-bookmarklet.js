@@ -1,4 +1,70 @@
 javascript:(function(){'use strict'
+// Start of code to display the xpath
+
+/**
+ * Get absolute xPath position from dom element
+ * xPath position will does not contain any id, class or attribute, etc selector
+ * Because, Some page use random id and class. This function should ignore that kind problem, so we're not using any selector
+ * 
+ * @param {Element} element element to get position
+ * @returns {String} xPath string
+ */
+ function getXPath(element) {
+    // Selector
+    let selector = '';
+    // Loop handler
+    let foundRoot;
+    // Element handler
+    let currentElement = element;
+
+    // Do action until we reach html element
+    do {
+        // Get element tag name 
+        const tagName = currentElement.tagName.toLowerCase();
+        // Get parent element
+        const parentElement = currentElement.parentElement;
+
+        // Count children
+        if (parentElement.childElementCount > 1) {
+            // Get children of parent element
+            const parentsChildren = [...parentElement.children];
+            // Count current tag 
+            let tag = [];
+            parentsChildren.forEach(child => {
+                if (child.tagName.toLowerCase() === tagName) tag.push(child) // Append to tag
+            })
+
+            // Is only of type
+            if (tag.length === 1) {
+                // Append tag to selector
+                selector = `/${tagName}${selector}`;
+            } else {
+                // Get position of current element in tag
+                const position = tag.indexOf(currentElement) + 1;
+                // Append tag to selector
+                selector = `/${tagName}[${position}]${selector}`;
+            }
+
+        } else {
+            //* Current element has no siblings
+            // Append tag to selector
+            selector = `/${tagName}${selector}`;
+        }
+
+        // Set parent element to current element
+        currentElement = parentElement;
+        // Is root  
+        foundRoot = parentElement.tagName.toLowerCase() === 'html';
+        // Finish selector if found root element
+        if(foundRoot) selector = `/html${selector}`;
+    }
+    while (foundRoot === false);
+
+    // Return selector
+    return selector;
+}
+
+// Start of regular JS Code to display the table
 function listImages(){
   console.clear();
   function isHidden(el) {
@@ -64,6 +130,9 @@ function listImages(){
   
     img.setAttribute('data-img-ref', i);
     let alt=img.getAttribute('alt');
+
+    // get Xpath
+    let xPathLocation=getXPath(img);
   
     if (alt===null) {
       alt="NO_ALT_ATTRIBUTE";
@@ -226,7 +295,8 @@ function listImages(){
       row +='<div class="anDiff">Accessible name differs</div>';
     }
     row +='</td>';
-    row +='<td><div class="snippet"><label for="snip'+ i + '">Code snippet</label><textarea id="snip'+ i + '" aria-label="Markup snippet for this node">' + snippet + '</textarea></div></td>';
+    row+='<td><div class="snippet"><label for="xpath'+ i + '">xPath</label><textarea readonly id="xpath'+ i + '" aria-label="Xpath snippet for this node">' + xPathLocation + '</textarea></div></td>';
+    row+='<td><div class="snippet"><label for="snip'+ i + '">Code Reference</label><textarea readonly id="snip'+ i + '" aria-label="Markup snippet for this node">' + snippet + '</textarea></div></td>';
     row +='</tr>';
     i++;
     if (warn || err) {
@@ -235,8 +305,8 @@ function listImages(){
       console.log(consoleOutput);
     }
   });
-  s='<style>[aria-pressed=true]{color:white;background:darkred;};div.issues{font-weight:bold;};textarea {margin:5px 0;}.snippet label {font-weight:bold;font-size:0.8em;color:black;}.snippet{background:#efefef;outline:1px solid #666;padding:5px;margin-top:5px;}.checkDiffs{background:PapayaWhip;}.anDiff{color:red;font-weight:bold;font-size:10px;display:block}.warn {background:initial;}.err {background:initial;}.visually-hidden,.a11y,.visuallyhidden,.sr-text,.sr-only {clip-path: inset(100%);clip: rect(1px, 1px, 1px, 1px);height: 1px;overflow: hidden;position: absolute;white-space: nowrap;width: 1px;}* {-webkit-box-sizing: border-box;box-sizing: border-box;}html {/*border: .75em solid #fff;*/min-height: 100vh;}body {background: #f7f7f5;color: #333;font: 400 105%/1.4 "Work Sans", sans-serif;margin: 1.5em auto;max-width: 54em;width: 90%;}a:img,a:visited {border-bottom: 1px solid rgba(42, 122, 130, .5);color: #2b7a82;text-decoration: none;}a:hover {border-bottom: 2px solid;color: #1e565c;}button:focus,a:focus {box-shadow: none;outline-offset: 2px;outline: 3px solid rgba(42, 122, 130, .75);}a:focus {border-bottom: none;}a:active {background: #333;color: #fff;}code {font-family: Consolas, monaco, monospace;-moz-tab-size: 4;tab-size: 4;text-transform: none;white-space: pre-wrap;color:brown;}textarea {width: 100%}legend h2, legend h3 {margin: 0;}table {border-collapse: collapse;}th,td {padding: 10px;border:2px solid #2b7a82;}table caption {font-weight: bold;text-align: left;margin:1em 0;}</style><h1>List of images on this page.</h1>';
-  s+='<table border="1" cellpadding="5"><caption>All images (img elements or elements with role="img") on this page have been found. Review the alt-text and ensure it is translated correctly.</caption><thead><tr valign=top><th>Image type</th><th>Image thumbnail</th><th scope="col">Alt-Text</th><th>Code Markup</th></tr></thead><tbody>' + row + '</tbody></table>';
+  s='<style>[aria-pressed=true]{color:white;background:darkred;};div.issues{font-weight:bold;};textarea {margin:5px 0;}.snippet label {font-weight:bold;font-size:0.8em;color:black;}.snippet{background:#efefef;outline:1px solid #666;padding:5px;margin-top:5px;}.checkDiffs{background:PapayaWhip;}.anDiff{color:red;font-weight:bold;font-size:10px;display:block}.warn {background:initial;}.err {background:initial;}.visually-hidden,.a11y,.visuallyhidden,.sr-text,.sr-only {clip-path: inset(100%);clip: rect(1px, 1px, 1px, 1px);height: 1px;overflow: hidden;position: absolute;white-space: nowrap;width: 1px;}* {-webkit-box-sizing: border-box;box-sizing: border-box;}html {/*border: .75em solid #fff;*/min-height: 100vh;}body {background: #f7f7f5;color: #333;font: 400 105%/1.4 "Work Sans", sans-serif;margin: 1.5em auto;max-width: 54em;width: 90%;}a:img,a:visited {border-bottom: 1px solid rgba(42, 122, 130, .5);color: #2b7a82;text-decoration: none;}a:hover {border-bottom: 2px solid;color: #1e565c;}button:focus,a:focus {box-shadow: none;outline-offset: 2px;outline: 3px solid rgba(42, 122, 130, .75);}a:focus {border-bottom: none;}a:active {background: #333;color: #fff;}code {font-family: Consolas, monaco, monospace;-moz-tab-size: 4;tab-size: 4;text-transform: none;white-space: pre-wrap;color:brown;}textarea {width: 100%}legend h2, legend h3 {margin: 0;}table {border-collapse: collapse;}th,td {padding: 10px;border:2px solid #2b7a82;}table caption {font-weight: bold;text-align: left;margin:1em 0;}th{min-width: 200px;} table td:nth-child(3), table th:nth-child(3){ background: yellow; font-weight: bold; color: #000000; }</style><h1>List of images on this page.</h1>';
+  s+='<table border="1" cellpadding="5"><caption>All images (img elements or elements with role="img") on this page have been found. Review the alt-text and ensure it is translated correctly. Use the Xpath to find the element.</caption><thead><tr valign=top><th>Image type</th><th>Image thumbnail</th><th scope="col">Alt-Text (Translate)</th><th>xPath</th><th>Code OuterHTML</th></tr></thead><tbody>' + row + '</tbody></table>';
   s+='<script>function showImages(){';
   s+='var refWindow=window.opener;';
   s+='var highlightButtons=document.querySelectorAll(".highlightButton");var imgToHighlight;Array.from(highlightButtons).forEach(highlightButton => {highlightButton.addEventListener("click", e => {imgToHighlight="[data-img-ref=\'" + highlightButton.getAttribute("data-img-ref") + "\']";if (highlightButton.getAttribute("aria-pressed")==="false") {refWindow.document.querySelector(imgToHighlight).setAttribute("tabindex","-1");refWindow.document.querySelector(imgToHighlight).focus();refWindow.document.querySelector(imgToHighlight).style.outline="10px solid darkred";refWindow.document.querySelector(imgToHighlight).style.outlineOffset="-10px";highlightButton.setAttribute("aria-pressed","true");} else {refWindow.document.querySelector(imgToHighlight).style.outline="";highlightButton.setAttribute("aria-pressed","false");}});});';
