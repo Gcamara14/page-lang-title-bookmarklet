@@ -32,11 +32,11 @@
     }
 
     .navigation-controls {
-        display: none;
+        display: none !important;
     }
     
     .buttons-container {
-        display: none;
+        display: none !important;
     }
 
     *, *::before, *::after {
