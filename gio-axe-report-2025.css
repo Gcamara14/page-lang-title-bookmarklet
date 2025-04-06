@@ -31,6 +31,14 @@
         --font-code: monospace;
     }
 
+    .navigation-controls {
+        display: none;
+    }
+    
+    .buttons-container {
+        display: none;
+    }
+
     *, *::before, *::after {
         box-sizing: border-box;
     }
