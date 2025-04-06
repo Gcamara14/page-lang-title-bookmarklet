@@ -1,0 +1,416 @@
+    /* --- Base Styles & Variables --- */
+    :root {
+        --primary-bg: #ffffff;
+        --text-color: #333333;
+        --heading-color: #1a1a1a;
+        --link-color: #0056b3;
+        --link-hover-color: #003d80;
+        --border-color: #e0e0e0;
+        --card-bg: #f9f9f9;
+        --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        --accordion-header-bg: #f1f1f1;
+        --accordion-header-hover-bg: #e9e9e9;
+        --table-header-bg: #e9ecef;
+        --table-row-odd-bg: #f8f9fa;
+        --button-bg: #007bff;
+        --button-text: #ffffff;
+        --button-hover-bg: #0056b3;
+        --button-disabled-bg: #c0c0c0;
+        --button-disabled-text: #666666;
+
+        --severity-critical-color: #d9534f; /* Red */
+        --severity-serious-color: #f0ad4e; /* Orange */
+        --severity-moderate-color: #5bc0de; /* Blue */
+        --severity-minor-color: #777777;   /* Grey */
+        --severity-best-practice-color: #5cb85c; /* Green */
+
+        --code-bg: #2d2d2d; /* Matches prism-tomorrow */
+        --code-text: #cccccc;
+
+        --font-primary: 'Lato', 'Quicksand', 'Outfit', sans-serif;
+        --font-code: monospace;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-primary);
+        background-color: var(--primary-bg);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 16px;
+    }
+
+    h2, h3 {
+        color: var(--heading-color);
+        margin-top: 1.5em;
+        margin-bottom: 0.8em;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    h2 {
+        font-size: 1.8em;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.3em;
+    }
+
+    h3 {
+        font-size: 1.4em;
+    }
+
+    a {
+        color: var(--link-color);
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+    }
+
+    p {
+        margin-bottom: 0.8em;
+    }
+
+    /* --- Summary Section --- */
+    #axe-summary {
+        display: flex;
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        gap: 20px; /* Space between cards */
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: var(--card-shadow);
+        flex: 1; /* Allow cards to grow */
+        min-width: 220px; /* Minimum width before wrapping */
+    }
+
+    .card h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+    }
+
+    .card p {
+        margin-bottom: 5px;
+        font-size: 1em;
+    }
+
+    .test-url p:first-child {
+        font-weight: bold;
+        color: var(--heading-color);
+    }
+
+    .test-url p:last-child {
+        word-break: break-all; /* Prevent long URLs from overflowing */
+    }
+
+    .total-issues p {
+        font-size: 2.5em;
+        font-weight: bold;
+        text-align: center;
+        color: var(--heading-color);
+        margin: 10px 0;
+    }
+
+    .total-group .total-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+    }
+
+    .total-item p {
+        margin: 0;
+        flex-grow: 1; /* Push count to the right */
+    }
+
+    .total-item span:last-child {
+        font-weight: bold;
+        margin-left: 10px; /* Space before the count */
+    }
+
+    .severity-bullet {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+    .severity-bullet.critical { background-color: var(--severity-critical-color); }
+    .severity-bullet.serious { background-color: var(--severity-serious-color); }
+    .severity-bullet.moderate { background-color: var(--severity-moderate-color); }
+    .severity-bullet.minor { background-color: var(--severity-minor-color); }
+    .severity-bullet.best-practice { background-color: var(--severity-best-practice-color); }
+
+    .axe-summary ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .axe-summary li {
+        margin-bottom: 5px;
+        font-size: 0.95em;
+    }
+
+    /* --- Accordion Styles --- */
+    .accordion-item {
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        overflow: hidden; /* Ensures content clipping */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .accordion-header {
+        cursor: pointer;
+        padding: 12px 18px;
+        font-weight: bold;
+        font-size: 1.1em;
+        background-color: var(--accordion-header-bg);
+        border: none; /* Remove default button border */
+        border-bottom: 1px solid var(--border-color);
+        width: 100%;
+        text-align: left;
+        color: var(--heading-color);
+        transition: background-color 0.2s ease;
+        position: relative; /* For pseudo-element */
+        font-family: 'Outfit', sans-serif;
+    }
+
+     /* Add indicator for open/closed state */
+    .accordion-header::after {
+        content: '+';
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.4em;
+        font-weight: normal;
+        color: #666;
+    }
+
+    .accordion-header[aria-expanded="true"]::after {
+        content: '−'; /* Use minus sign when expanded */
+    }
+
+
+    .accordion-header:hover {
+        background-color: var(--accordion-header-hover-bg);
+    }
+
+    .accordion-content {
+        padding: 20px;
+        display: none; /* Controlled by JS */
+        background-color: var(--primary-bg);
+        border-top: 1px solid var(--border-color); /* Separator line */
+    }
+
+    /* --- Table Styles --- */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: 0.95em;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid var(--border-color);
+        vertical-align: top; /* Align content to top */
+    }
+
+    thead th {
+        background-color: var(--table-header-bg);
+        font-weight: bold;
+        color: var(--heading-color);
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: var(--table-row-odd-bg);
+    }
+
+    tbody tr:hover {
+        background-color: #e9ecef; /* Subtle hover for rows */
+    }
+
+    td.bg-yellow { /* Keep existing yellow for emphasis if needed, but tone it down */
+      background-color: #fff3cd; /* Lighter yellow */
+      font-weight: bold;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        font-size: 0.85em;
+        font-weight: bold;
+        background-color: var(--button-bg);
+        color: var(--button-text);
+        border-radius: 4px;
+        min-width: 25px;
+        text-align: center;
+    }
+
+    /* --- Bug Description Cell Content --- */
+    .bug-description-cell {
+        line-height: 1.5;
+    }
+
+    .bug-description-content div {
+        margin-bottom: 15px; /* Space between sections */
+    }
+    .bug-description-content div:last-child {
+        margin-bottom: 0;
+    }
+
+    .bug-description-content p {
+        margin-bottom: 8px; /* Smaller margin for paragraphs within description */
+        font-size: 0.9em;
+    }
+
+    .bug-description-content p strong {
+        color: var(--heading-color);
+    }
+
+    .bug-description-content ul {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding-left: 20px; /* Indent list items */
+        font-size: 0.9em;
+    }
+
+    .bug-description-content ul li {
+        margin-bottom: 5px;
+    }
+
+    /* --- Code Snippets (Prism.js) --- */
+    pre[class*="language-"] {
+        padding: 1em;
+        margin: .5em 0 1em 0 !important; /* Add bottom margin */
+        overflow: auto;
+        border-radius: 6px;
+        background-color: var(--code-bg) !important; /* Ensure background override */
+        font-family: var(--font-code);
+        font-size: 0.9em;
+    }
+
+    code[class*="language-"] {
+       font-family: var(--font-code);
+       color: var(--code-text);
+    }
+
+    /* --- Severity Badge within Description --- */
+    .severity-badge-wrapper {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .severity-badge {
+        margin: 0 0 0 5px; /* Reset margin, add left margin */
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    /* Reuse severity bullet styles */
+    .severity-badge-wrapper .severity-bullet { margin-right: 5px; }
+    .severity-badge-wrapper .severity-bullet.critical + .severity-badge { color: var(--severity-critical-color); }
+    .severity-badge-wrapper .severity-bullet.serious + .severity-badge { color: var(--severity-serious-color); }
+    .severity-badge-wrapper .severity-bullet.moderate + .severity-badge { color: var(--severity-moderate-color); }
+    .severity-badge-wrapper .severity-bullet.minor + .severity-badge { color: var(--severity-minor-color); }
+    .severity-badge-wrapper .severity-bullet.best-practice + .severity-badge { color: var(--severity-best-practice-color); }
+
+    /* --- Buttons --- */
+    button, .highlight-btn, .save-axe-bug-btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+        font-weight: bold;
+        font-family: var(--font-primary);
+        border: 1px solid transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        margin-right: 8px; /* Space between buttons */
+        background-color: var(--button-bg);
+        color: var(--button-text);
+    }
+    button:last-child, .buttons-container button:last-child {
+        margin-right: 0;
+    }
+
+    button:hover, .highlight-btn:hover, .save-axe-bug-btn:hover {
+        background-color: var(--button-hover-bg);
+        border-color: var(--button-hover-bg);
+    }
+
+    button:disabled, .highlight-btn:disabled, .save-axe-bug-btn:disabled {
+        background-color: var(--button-disabled-bg);
+        color: var(--button-disabled-text);
+        border-color: var(--button-disabled-bg);
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .navigation-controls {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed var(--border-color); /* Separator */
+    }
+    .navigation-controls span {
+        margin: 0 10px;
+        font-style: italic;
+        color: #555;
+    }
+
+    .buttons-container {
+        margin-top: 15px;
+        text-align: right; /* Align buttons to the right */
+    }
+
+    /* --- Image Adjustments (Example - might need specifics) --- */
+    img {
+        max-width: 100%; /* Prevent images breaking layout */
+        height: auto;   /* Maintain aspect ratio */
+    }
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+        #axe-summary {
+            flex-direction: column; /* Stack cards vertically */
+            gap: 15px;
+        }
+        .card {
+            min-width: 100%; /* Full width on small screens */
+        }
+        h2 { font-size: 1.6em; }
+        h3 { font-size: 1.2em; }
+        th, td { padding: 8px 10px; font-size: 0.9em;}
+        button, .highlight-btn, .save-axe-bug-btn { padding: 6px 12px; font-size: 0.85em;}
+        .buttons-container { text-align: left; } /* Stack buttons left */
+    }
+
+</style>
