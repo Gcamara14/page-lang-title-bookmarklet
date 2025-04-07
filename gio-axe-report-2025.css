@@ -34,6 +34,10 @@
     .navigation-controls {
         display: none !important;
     }
+
+    button.btn.btn-warning.btn-sm {
+        display: none;
+    }
     
     .buttons-container {
         display: none !important;
